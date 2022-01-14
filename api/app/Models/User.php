@@ -45,6 +45,6 @@ class User extends Authenticatable
 
     public function giftList(): HasOne
     {
-        return $this->hasOne(GiftList::class);
+        return $this->hasOne(Gift::class);
     }
 }

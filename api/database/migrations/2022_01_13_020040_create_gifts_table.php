@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGiftListsTable extends Migration
+class CreateGiftsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,16 @@ class CreateGiftListsTable extends Migration
      */
     public function up()
     {
-        Schema::create('gift_lists', function (Blueprint $table) {
+        Schema::create('gifts', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->foreignId('user_id');
-            $table->json('gifts');
+            $table->string('product');
+            $table->float('price', 8, 2);
+            $table->string('picture')->nullable();
             $table->string('store')->nullable();
+            $table->string('store_link')->nullable();
             $table->string('access_key');
+            $table->timestamps();
         });
     }
 

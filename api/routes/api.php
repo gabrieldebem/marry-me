@@ -25,10 +25,10 @@ Route::post('/users', [UserController::class, 'create']);
 Route::put('/users/{user}', [UserController::class, 'update']);
 Route::delete('/users/{user}', [UserController::class, 'delete']);
 
-Route::group('/users', function (){
-    Route::get('/giftLists', [UserController::class, 'list']);
-    Route::get('/giftLists/{giftList}', [UserController::class, 'show']);
-    Route::post('/giftLists', [UserController::class, 'create']);
-    Route::put('/giftLists/{giftList}', [UserController::class, 'update']);
-    Route::delete('/giftLists/{giftList}', [UserController::class, 'delete']);
+Route::prefix('gifts')->group(function () {
+    Route::get('/', [UserController::class, 'list']);
+    Route::get('/{giftList}', [UserController::class, 'show']);
+    Route::post('/', [UserController::class, 'create']);
+    Route::put('/{giftList}', [UserController::class, 'update']);
+    Route::delete('/{giftList}', [UserController::class, 'delete']);
 });

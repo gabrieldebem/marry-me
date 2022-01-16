@@ -40,7 +40,9 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'email_verified_at' => 'date:Y-m-d',
+        'created_at' => 'date:Y-m-d',
+        'updated_at' => 'date:Y-m-d',
     ];
 
     public function giftList(): HasOne

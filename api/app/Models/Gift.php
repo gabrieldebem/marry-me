@@ -12,9 +12,10 @@ class Gift extends Model
 
     protected $fillable = [
         'user_id',
-        'gifts',
+        'product',
+        'price',
         'store',
-        'access_key',
+        'store_link',
     ];
 
     public function user(): BelongsTo

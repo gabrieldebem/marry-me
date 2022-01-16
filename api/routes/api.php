@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GiftController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,20 +17,24 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/users', [UserController::class, 'list']);
-Route::get('/users/{user}', [UserController::class, 'show']);
-Route::post('/users', [UserController::class, 'create']);
-Route::put('/users/{user}', [UserController::class, 'update']);
-Route::delete('/users/{user}', [UserController::class, 'delete']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('users')->group(function (){
+        Route::get('/', [UserController::class, 'list']);
+        Route::get('/{user}', [UserController::class, 'show']);
+        Route::put('/{user}', [UserController::class, 'update']);
+        Route::delete('/{user}', [UserController::class, 'delete']);
+    });
 
-Route::prefix('gifts')->group(function () {
-    Route::get('/', [UserController::class, 'list']);
-    Route::get('/{giftList}', [UserController::class, 'show']);
-    Route::post('/', [UserController::class, 'create']);
-    Route::put('/{giftList}', [UserController::class, 'update']);
-    Route::delete('/{giftList}', [UserController::class, 'delete']);
+    Route::prefix('gifts')->group(function () {
+
+        Route::get('/', [GiftController::class, 'list']);
+        Route::get('/{gift}', [GiftController::class, 'show']);
+        Route::get('/{gift}/picture', [GiftController::class, 'downloadPicture']);
+        Route::post('/', [GiftController::class, 'create']);
+        Route::put('/{gift}', [GiftController::class, 'update']);
+        Route::delete('/{gift}', [GiftController::class, 'delete']);
+    });
 });

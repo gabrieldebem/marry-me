@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -15,19 +15,26 @@ class UserTest extends TestCase
 
     public function testCanListUsers()
     {
+        Sanctum::actingAs(
+            User::factory()->create(),
+            ['*']
+        );
+
         User::factory()
             ->count(5)
             ->create();
 
         $this->get('/api/users')
             ->assertSuccessful()
-            ->assertJsonCount(5);
+            ->assertJsonCount(6);
     }
 
     public function testCanGetUser()
     {
-        $user = User::factory()
-            ->create();
+        Sanctum::actingAs(
+            $user = User::factory()->create(),
+            ['*']
+        );
 
         $this->get("/api/users/{$user->id}")
             ->assertSuccessful()
@@ -38,23 +45,4 @@ class UserTest extends TestCase
             ]);
     }
 
-    public function testCanCreateUser()
-    {
-        $name = $this->faker->name;
-        $email = $this->faker->email;
-
-        $this->post("/api/users", [
-            'name' => $name,
-            'email' => $email,
-            'password' => 'senha123',
-        ])->assertSuccessful();
-
-        $this->assertDatabaseHas('users', [
-            'name' => $name,
-            'email' => $email
-        ]);
-
-        $user = User::where('email', $email)->firstOrFail();
-        $this->assertTrue(Hash::check('senha123', $user->password));
-    }
 }
